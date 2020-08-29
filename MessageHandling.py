@@ -292,68 +292,80 @@ def decode_bist_data_object(word):
 # the pdo type needs to be extracted from the source capabilities message, at the object_position taken from this (word >> 28) & 0x7
 
 
-def decode_request_data_object(word, pdo_type):
+def decode_request_data_object(word):
     data = {
         'data_object_type': 'Request Data Object'
     }
     frame_type = 'object'
-    if pdo_type == 'Fixed Supply' or pdo_type == 'Variable Supply':
-        object_position = (word >> 28) & 0x7
-        giveback_flag = (word >> 27) & 0x1
-        capability_mismatch = (word >> 26) & 0x1
-        usb_communications_capable = (word >> 25) & 0x1
-        no_usb_suspend = (word >> 24) & 0x1
-        unchunked_extended_messages_supported = (word >> 23) & 0x1
-        operating_current_10ma_units = (word >> 10) & 0x3FF
-        maximum_operating_current_10ma_units = word & 0x3FF
-        data['object_position'] = object_position
-        data['giveback_flag'] = giveback_flag
-        data['capability_mismatch'] = capability_mismatch
-        data['usb_communications_capable'] = usb_communications_capable
-        data['no_usb_suspend'] = no_usb_suspend
-        data['unchunked_extended_messages_supported'] = unchunked_extended_messages_supported
-        data['operating_current_10ma_units'] = operating_current_10ma_units
-        data['maximum_operating_current_10ma_units'] = maximum_operating_current_10ma_units
-        if pdo_type == 'Fixed Supply':
-            frame_type = 'fixed_supply_rdo'
-        if pdo_type == 'Variable Supply':
-            frame_type = 'variable_supply_rdo'
-        pass
-    elif pdo_type == 'Battery':
-        object_position = (word >> 28) & 0x7
-        giveback_flag = (word >> 27) & 0x1
-        capability_mismatch = (word >> 26) & 0x1
-        usb_communications_capable = (word >> 25) & 0x1
-        no_usb_suspend = (word >> 24) & 0x1
-        unchunked_extended_messages_supported = (word >> 23) & 0x1
-        operating_power_250mw_units = (word >> 10) & 0x3FF
-        maximum_operating_power_250mw_units = word & 0x3FF
-        data['object_position'] = object_position
-        data['giveback_flag'] = giveback_flag
-        data['capability_mismatch'] = capability_mismatch
-        data['usb_communications_capable'] = usb_communications_capable
-        data['no_usb_suspend'] = no_usb_suspend
-        data['unchunked_extended_messages_supported'] = unchunked_extended_messages_supported
-        data['operating_power_250mw_units'] = operating_power_250mw_units
-        data['maximum_operating_power_250mw_units'] = maximum_operating_power_250mw_units
-        frame_type = 'battery_rdo'
 
-    elif pdo_type == 'Programmable Power Supply':
-        object_position = (word >> 28) & 0x7
-        capability_mismatch = (word >> 26) & 0x1
-        usb_communications_capable = (word >> 25) & 0x1
-        no_usb_suspend = (word >> 24) & 0x1
-        unchunked_extended_messages_supported = (word >> 23) & 0x1
-        output_voltage_20mV_units = (word >> 9) & 0x7FF
-        operating_current_50ma_unites = word & 0x7F
-        data['object_position'] = object_position
-        data['capability_mismatch'] = capability_mismatch
-        data['usb_communications_capable'] = usb_communications_capable
-        data['no_usb_suspend'] = no_usb_suspend
-        data['unchunked_extended_messages_supported'] = unchunked_extended_messages_supported
-        data['output_voltage_20mV_units'] = output_voltage_20mV_units
-        data['operating_current_50ma_unites'] = operating_current_50ma_unites
-        frame_type = 'programmable_supply_rdo'
+    # if pdo_type == 'Fixed Supply' or pdo_type == 'Variable Supply':
+    #     object_position = (word >> 28) & 0x7
+    #     giveback_flag = (word >> 27) & 0x1
+    #     capability_mismatch = (word >> 26) & 0x1
+    #     usb_communications_capable = (word >> 25) & 0x1
+    #     no_usb_suspend = (word >> 24) & 0x1
+    #     unchunked_extended_messages_supported = (word >> 23) & 0x1
+    #     operating_current_10ma_units = (word >> 10) & 0x3FF
+    #     maximum_operating_current_10ma_units = word & 0x3FF
+    #     data['object_position'] = object_position
+    #     data['giveback_flag'] = giveback_flag
+    #     data['capability_mismatch'] = capability_mismatch
+    #     data['usb_communications_capable'] = usb_communications_capable
+    #     data['no_usb_suspend'] = no_usb_suspend
+    #     data['unchunked_extended_messages_supported'] = unchunked_extended_messages_supported
+    #     data['operating_current_10ma_units'] = operating_current_10ma_units
+    #     data['maximum_operating_current_10ma_units'] = maximum_operating_current_10ma_units
+    #     if pdo_type == 'Fixed Supply':
+    #         frame_type = 'fixed_supply_rdo'
+    #     if pdo_type == 'Variable Supply':
+    #         frame_type = 'variable_supply_rdo'
+    #     pass
+    # elif pdo_type == 'Battery':
+    #     object_position = (word >> 28) & 0x7
+    #     giveback_flag = (word >> 27) & 0x1
+    #     capability_mismatch = (word >> 26) & 0x1
+    #     usb_communications_capable = (word >> 25) & 0x1
+    #     no_usb_suspend = (word >> 24) & 0x1
+    #     unchunked_extended_messages_supported = (word >> 23) & 0x1
+    #     operating_power_250mw_units = (word >> 10) & 0x3FF
+    #     maximum_operating_power_250mw_units = word & 0x3FF
+    #     data['object_position'] = object_position
+    #     data['giveback_flag'] = giveback_flag
+    #     data['capability_mismatch'] = capability_mismatch
+    #     data['usb_communications_capable'] = usb_communications_capable
+    #     data['no_usb_suspend'] = no_usb_suspend
+    #     data['unchunked_extended_messages_supported'] = unchunked_extended_messages_supported
+    #     data['operating_power_250mw_units'] = operating_power_250mw_units
+    #     data['maximum_operating_power_250mw_units'] = maximum_operating_power_250mw_units
+    #     frame_type = 'battery_rdo'
+
+    # elif pdo_type == 'Programmable Power Supply':
+    #     object_position = (word >> 28) & 0x7
+    #     capability_mismatch = (word >> 26) & 0x1
+    #     usb_communications_capable = (word >> 25) & 0x1
+    #     no_usb_suspend = (word >> 24) & 0x1
+    #     unchunked_extended_messages_supported = (word >> 23) & 0x1
+    #     output_voltage_20mV_units = (word >> 9) & 0x7FF
+    #     operating_current_50ma_unites = word & 0x7F
+    #     data['object_position'] = object_position
+    #     data['capability_mismatch'] = capability_mismatch
+    #     data['usb_communications_capable'] = usb_communications_capable
+    #     data['no_usb_suspend'] = no_usb_suspend
+    #     data['unchunked_extended_messages_supported'] = unchunked_extended_messages_supported
+    #     data['output_voltage_20mV_units'] = output_voltage_20mV_units
+    #     data['operating_current_50ma_unites'] = operating_current_50ma_unites
+    #     frame_type = 'programmable_supply_rdo'
+
+    data['object_position'] = 'UNKNOWN'
+    data['giveback_flag'] = 'UNKNOWN'
+    data['capability_mismatch'] = 'UNKNOWN'
+    data['usb_communications_capable'] = 'UNKNOWN'
+    data['no_usb_suspend'] = 'UNKNOWN'
+    data['unchunked_extended_messages_supported'] = 'UNKNOWN'
+    data['operating_current_10ma_units'] = 'UNKNOWN'
+    data['maximum_operating_current_10ma_units'] = 'UNKNOWN'
+    frame_type = 'UNKNOWN'
+
     return frame_type, data
 
 
